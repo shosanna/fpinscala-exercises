@@ -50,17 +50,45 @@ object List { // `List` companion object. Contains functions for creating and wo
     foldRight(ns, 1.0)(_ * _) // `_ * _` is more concise notation for `(x,y) => x * y`; see sidebar
 
 
-  def tail[A](l: List[A]): List[A] = sys.error("todo")
+  def tail[A](l: List[A]): List[A] = l match {
+    case Nil => Nil
+    case Cons(_,xs) => xs
+  }
 
-  def setHead[A](l: List[A], h: A): List[A] = sys.error("todo")
+  def setHead[A](l: List[A], h: A): List[A] = l match {
+    case Nil => Cons(h, Nil)
+    case Cons(x,xs) => Cons(h,xs)
+  }
 
-  def drop[A](l: List[A], n: Int): List[A] = sys.error("todo")
+  def drop[A](l: List[A], n: Int): List[A] = l match {
+    case Nil => Nil
+    case Cons(x,xs) if n == 0 => Cons(x, xs)
+    case Cons(x,xs) => drop(xs, n - 1)
 
-  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = sys.error("todo")
+  }
 
-  def init[A](l: List[A]): List[A] = sys.error("todo")
+  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = l match {
+    case Nil => Nil
+    case Cons(x,xs) => if (f(x)) dropWhile(xs,f) else l
+  }
 
-  def length[A](l: List[A]): Int = sys.error("todo")
+  def init[A](l: List[A]): List[A] = {
+   def reverse[A](l: List[A], acc: List[A]): List[A] = l match {
+     case Nil => Nil
+     case Cons(x,Nil) => Cons(x,acc)
+     case Cons(x,xs) => reverse(xs, Cons(x,acc))
+   }
+
+   reverse(l,Nil) match {
+     case Nil => Nil
+     case Cons(x,xs) => reverse(xs, Nil)
+    }
+  }
+
+  def length[A](l: List[A]): Int = l match {
+    case Nil => 0
+    case Cons(x,xs) => 1 + length(xs)
+  }
 
   def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = sys.error("todo")
 
